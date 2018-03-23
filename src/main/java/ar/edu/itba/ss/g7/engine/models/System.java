@@ -5,6 +5,8 @@ import ar.edu.itba.ss.g7.engine.simulation.StateHolder;
 
 /**
  * Defines behaviour for an object that represents a system to be simulated.
+ *
+ * @param <S> The concrete type of {@link State} that represents the implementation of this interface.
  */
 public interface System<S extends State> extends StateHolder<S> {
 

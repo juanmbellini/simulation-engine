@@ -7,6 +7,8 @@ import java.util.Queue;
 
 /**
  * The simulation engine.
+ *
+ * @param <S> The concrete type of {@link State} that represents the implementation of this interface.
  */
 public class SimulationEngine<S extends State> {
 
