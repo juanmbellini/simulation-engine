@@ -9,6 +9,7 @@ import java.util.Queue;
  * The simulation engine.
  *
  * @param <S> The concrete type of {@link State} that represents the implementation of this interface.
+ * @implNote This engine is not thread safe.
  */
 public class SimulationEngine<S extends State> {
 
@@ -20,10 +21,6 @@ public class SimulationEngine<S extends State> {
      * A {@link Queue} holding the {@link State}s generated in each simulation step.
      */
     private final Queue<S> states;
-    /**
-     * The initial state (i.e saved for engine reset).
-     */
-    private final S initialState;
     /**
      * A flag indicating whether the engine is initialized.
      */
@@ -37,7 +34,6 @@ public class SimulationEngine<S extends State> {
     public SimulationEngine(System<S> system) {
         this.system = system;
         this.states = new LinkedList<>();
-        this.initialState = system.outputState();
         this.initialized = false;
     }
 
@@ -45,7 +41,7 @@ public class SimulationEngine<S extends State> {
      * Initializes this engine.
      */
     public final void initialize() {
-        saveActualState();
+        clear();
         this.initialized = true;
     }
 
@@ -56,11 +52,9 @@ public class SimulationEngine<S extends State> {
      */
     public void simulate(final int iterations) {
         validateState();
-        synchronized (states) {
-            for (int iteration = 0; iteration < iterations; iteration++) {
-                system.update();
-                saveActualState();
-            }
+        for (int iteration = 0; iteration < iterations; iteration++) {
+            system.update();
+            saveActualState();
         }
     }
 
@@ -70,9 +64,7 @@ public class SimulationEngine<S extends State> {
      * @return The simulation results.
      */
     public Queue<S> getResults() {
-        synchronized (states) {
-            return new LinkedList<>(states);
-        }
+        return new LinkedList<>(states); // Copy queue to avoid change of state from outside.
     }
 
     /**
@@ -81,20 +73,17 @@ public class SimulationEngine<S extends State> {
      *
      * @throws IllegalStateException In case this engine is now simulating.
      */
-    public void clearEngine() throws IllegalStateException {
-        validateState();
-        synchronized (states) {
-            this.states.clear();
-            saveActualState();
-        }
-
+    public void clear() throws IllegalStateException {
+        this.states.clear();
+        system.restart();
+        saveActualState();
     }
 
     /**
      * Saves the actual state in the {@code states} {@link Queue}.
      */
     private void saveActualState() {
-        this.states.offer(this.initialState);
+        this.states.offer(this.system.outputState());
     }
 
     /**
@@ -107,6 +96,4 @@ public class SimulationEngine<S extends State> {
             throw new IllegalStateException("Engine not initialized. Must call #initialize method first!");
         }
     }
-
-
 }

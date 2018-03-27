@@ -14,4 +14,9 @@ public interface System<S extends State> extends StateHolder<S> {
      * Updates the system.
      */
     void update();
+
+    /**
+     * Restarts this system (i.e puts the system in its initial conditions).
+     */
+    void restart();
 }
