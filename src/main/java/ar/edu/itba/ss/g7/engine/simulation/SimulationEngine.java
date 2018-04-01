@@ -4,6 +4,7 @@ import ar.edu.itba.ss.g7.engine.models.System;
 
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.function.Predicate;
 
 /**
  * The simulation engine.
@@ -53,6 +54,20 @@ public class SimulationEngine<S extends State> {
     public void simulate(final int iterations) {
         validateState();
         for (int iteration = 0; iteration < iterations; iteration++) {
+            system.update();
+            saveActualState();
+        }
+    }
+
+    /**
+     * Performs the simulation.
+     *
+     * @param stopCondition The {@link Predicate} that takes a {@link System}
+     *                      an tells whether the simulation must stop.
+     */
+    public void simulate(Predicate<System> stopCondition) {
+        validateState();
+        while (!stopCondition.test(this.system)) {
             system.update();
             saveActualState();
         }
