@@ -24,7 +24,7 @@ public abstract class OvitoFileSaver<S extends State> extends TextFileSaver<S> {
     }
 
     @Override
-    void doSave(Writer writer, Queue<S> simulationStates) throws IOException {
+    public void doSave(Writer writer, Queue<S> simulationStates) throws IOException {
         int frame = 0;
         while (!simulationStates.isEmpty()) {
             saveState(writer, simulationStates.poll(), frame);
@@ -38,6 +38,5 @@ public abstract class OvitoFileSaver<S extends State> extends TextFileSaver<S> {
      * @param state  The state to be saved.
      * @param writer The {@link FileWriter} in which the {@code state} will be saved into..
      */
-    /* package */
-    abstract void saveState(Writer writer, S state, int frame) throws IOException;
+    public abstract void saveState(Writer writer, S state, int frame) throws IOException;
 }

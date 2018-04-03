@@ -38,5 +38,5 @@ public abstract class TextFileSaver<S extends State> extends FileDataSaver<S> {
      * @param simulationStates The simulation results to be saved.
      * @throws IOException In case any I/O error occurs while performing the operation.
      */
-    abstract void doSave(Writer writer, Queue<S> simulationStates) throws IOException;
+    public abstract void doSave(Writer writer, Queue<S> simulationStates) throws IOException;
 }
