@@ -13,7 +13,7 @@ import java.util.Queue;
  *
  * @param <S> A concrete subtype of {@link State}.
  */
-/* package */ abstract class FileDataSaver<S extends State> implements DataSaver<S> {
+public abstract class FileDataSaver<S extends State> implements DataSaver<S> {
 
     /**
      * The {@link Logger} object.

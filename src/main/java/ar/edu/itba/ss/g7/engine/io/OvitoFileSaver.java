@@ -12,7 +12,7 @@ import java.util.Queue;
  *
  * @param <S> A concrete subtype of {@link State}.
  */
-/* package */ abstract class OvitoFileSaver<S extends State> extends TextFileSaver<S> {
+public abstract class OvitoFileSaver<S extends State> extends TextFileSaver<S> {
 
     /**
      * Constructor.
