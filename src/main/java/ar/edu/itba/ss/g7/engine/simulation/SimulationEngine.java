@@ -10,14 +10,15 @@ import java.util.function.Predicate;
  * The simulation engine.
  *
  * @param <S> The concrete type of {@link State} that represents the implementation of this interface.
+ * @param <T> The concrete type of {@link System} that represents the implementation of this interface.
  * @implNote This engine is not thread safe.
  */
-public class SimulationEngine<S extends State> {
+public class SimulationEngine<S extends State, T extends System<S>> {
 
     /**
      * The system to which the simulation will be performed.
      */
-    private final System<S> system;
+    private final T system;
     /**
      * A {@link Queue} holding the {@link State}s generated in each simulation step.
      */
@@ -32,7 +33,7 @@ public class SimulationEngine<S extends State> {
      *
      * @param system The system to which the simulation will be performed.
      */
-    public SimulationEngine(System<S> system) {
+    public SimulationEngine(T system) {
         this.system = system;
         this.states = new LinkedList<>();
         this.initialized = false;
@@ -63,9 +64,9 @@ public class SimulationEngine<S extends State> {
      * Performs the simulation.
      *
      * @param stopCondition The {@link Predicate} that takes a {@link System}
-     *                      an tells whether the simulation must stop.
+     *                      and tells whether the simulation must stop.
      */
-    public void simulate(Predicate<System> stopCondition) {
+    public void simulate(Predicate<T> stopCondition) {
         validateState();
         while (!stopCondition.test(this.system)) {
             system.update();
